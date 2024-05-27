@@ -14,7 +14,7 @@ Feature: buy Mobile from ecommerce site
     And user selects the phones he wants to buy
     |Mobile|
     |iphone X|
-    # |Samsung Note 8|
+    |Samsung Note 8|
     |Nokia Edge|
     And user clicks on the checkout button on the mobile selection page
     And user calculates the total price of selected mobile phones
