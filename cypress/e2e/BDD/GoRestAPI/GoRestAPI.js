@@ -1,6 +1,6 @@
 import { Given,Then,When, And } from "cypress-cucumber-preprocessor/Steps";
 
-let token='Bearer fa5153ca6180bef601ade9de0d6250bfbe715a5f288d92c857a26c02e4441586' 
+let token='Bearer aba32c2463a315478a1ef82489f6d3713966a011587c12d71fab88287b53235c' 
 Given('user uses a Get api call to fetch data',()=>{
     cy.request({
         method:'Get', //invoke get method
@@ -12,10 +12,10 @@ Given('user uses a Get api call to fetch data',()=>{
         cy.wrap(res).as('res') //set res as alias for response
     })   
 
-    Then('validates the response code',()=>{
+    Then('validates the response code {string}',(resCode)=>{
         cy.get('@res').then((res)=>{ //use the alias to get the response value in another function
-            expect(res.status).to.eq(200) //verify the status code is 200
-
+            resCode=parseInt(resCode)
+            expect(res.status).to.eq(resCode)//verify the status code is 200
         })
 
     })
@@ -24,15 +24,13 @@ Given('user uses a Get api call to fetch data',()=>{
             dataTable.hashes().forEach(element => { //get the values of name in the datatable array from the feature file
                 cy.get('@res').then((res)=>{ //use the alias to get the response value in another function
                     for(var index in res.body){
-                        if(res.body[index].name==element.Name){ //if the reponse name is equal to the name defined in feature file
-                            console.log ('Name is '+element.Name+ ' and Id is '+ res.body[index].id) //print the names
-                       }  
-                    }
+                                                if(res.body[index].name==element.Name){ //if the reponse name is equal to the name defined in feature file
+                         console.log ('Name is '+element.Name+ ' and Id is '+ res.body[index].id) //print the names
+                    }  
+                 }
 
                 })           
             }) 
        })
-
-
-})
+    })
 
