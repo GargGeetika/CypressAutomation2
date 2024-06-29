@@ -10,8 +10,8 @@ Feature: Learn various Rest calls using 'https://gorest.co.in/rest-console'
     |Priya Varrier|
     |Mohan Marar|
 
-    #Scenario: Use Post call to insert user record and validate it
-    #Given user wants to enter data using the post call
-    #Then validates the response code '200'
-    #And fetches the new record
+    Scenario: Use Post call to insert user record and validate it
+    Given user wants to enter new data using the post call
+    Then validates the response code '201'
+    And validate the body of the response
 
