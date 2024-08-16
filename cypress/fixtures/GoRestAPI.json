@@ -1,5 +1,9 @@
-{
-    "name": "Test Automation",    
+[
+  {
+    "id": 7347568,
+    "name": "Test Automation test",
     "gender": "male",
-    "status": "active"
-}
+    "status": "inactive",
+    "email": "3BFunpB@testmail.com"
+  }
+]
