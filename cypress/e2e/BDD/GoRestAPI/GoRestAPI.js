@@ -1,4 +1,7 @@
 import { Given, When, Then,And } from "cypress-cucumber-preprocessor/Steps";
+/// <reference types="cypress"/>
+const neatCSV=require('neat-csv')
+
 
 let token='Bearer aba32c2463a315478a1ef82489f6d3713966a011587c12d71fab88287b53235c' 
 let pattern="" //used in post call to make a random email
@@ -124,7 +127,7 @@ Given('user uses a Get api call to fetch data',()=>{
             
         },
         {
-        //statusCode:'200',
+        statusCode:200,
         fixture: 'GoRestAPI.json' //we are giving the user data from the fixture
         // body: { //this is the part where we can give static data to intercept
                 
@@ -178,15 +181,52 @@ Given('user uses a Get api call to fetch data',()=>{
         }) 
    })
 
+   Given ('User navigates to the website with stored session token',()=>{
+    cy.LoginUsingAPI().then(()=>{
+        cy.visit('https://rahulshettyacademy.com/client',{
+            onBeforeLoad: function (window){
+                window.localStorage.setItem('token',Cypress.env('token'))
+            }    
+        })
+    })
+})
 
+Then ('place an order in the cart',()=>{
+    cy.get('.card-body>button.w-10').eq(1).click()
+    cy.get('.ng-star-inserted>app-sidebar>nav>ul>li button[routerlink="/dashboard/cart"]').click()
+    cy.get('div.cartSection>button.btn-primary').click()
 
+})
 
+And ('select the country and place the order',()=>{
+    cy.get('div.form-group>input.text-validated').type('Ind')
+    cy.get('.ta-results>button').each(($el,index,$list)=>{
+        if($el.text()=== ' India') cy.wrap($el).click()
+    })
+    cy.get('.action__submit').click()
+    cy.wait(2000)
+    cy.get('tbody>tr>button.btn.btn-primary.mt-3.mb-3:contains("CSV")').click()
+})
+
+And ('download the order csv file',()=>{
+    cy.get('tbody>tr>button.btn.btn-primary.mt-3.mb-3:contains("CSV")').click()
+    //cy.readFile('/Downloads/fileName.zip').should('exist')
+    cy.readFile(Cypress.config("fileServerFolder")+"/cypress/downloads/order-invoice_test123.csv").then(async(text)=>{
+        const csv= await neatCSV(text)
+        console.log(csv)
+
+    })
+
+})
+
+And ('download the order excel file',()=>{
+    cy.get('tbody>tr>button.btn.btn-primary.mt-3.mb-3:contains("Excel")').click()
+    const filePath=Cypress.config("fileServerFolder")+"/cypress/downloads/order-invoice_test123.xlsx"
+    //C:\Projects\CypressAutomation\CypressAutomation2\cypress\downloads\order-invoice_test123.xlsx
+    cy.task('excelToJsonConverter',filePath).then((result)=>{
+        console.log(result)
+        cy.log("Product Name= "+result.data[1].B)
+    })
     
-
-
-
-
-
-
-
-
+ 
+})

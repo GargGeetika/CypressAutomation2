@@ -32,3 +32,15 @@ Feature: Learn various Rest calls using 'https://gorest.co.in/rest-console'
     Scenario: Create an Intercept response from the fixture file
     Given Mocking data with intercept call
 
+    Scenario: Create custom command to store token and login using API and download csv file
+    Given User navigates to the website with stored session token
+    Then place an order in the cart 
+    And select the country and place the order
+    And download the order csv file
+
+    Scenario: Create custom command to store token and login using API and download excel file
+    Given User navigates to the website with stored session token
+    Then place an order in the cart 
+    And select the country and place the order
+    And download the order excel file
+    
